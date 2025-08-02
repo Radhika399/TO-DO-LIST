@@ -1,0 +1,324 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>My Ultimate To-Do List</title>
+  <style>
+    :root {
+      --bg-light: #f7f7f7;
+      --card-light: #ffffff;
+      --text-light: #1f2937;
+      --accent-light: #6366f1;
+
+      --bg-dark: #0f172a;
+      --card-dark: #1e293b;
+      --text-dark: #f8fafc;
+      --accent-dark: #a5b4fc;
+
+      --transition-speed: 0.3s;
+    }
+
+    body {
+      margin: 0;
+      padding: 0;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: linear-gradient(to right, #c2e9fb, #a1c4fd);
+      min-height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: flex-start;
+      padding: 30px 15px;
+      transition: background var(--transition-speed), color var(--transition-speed);
+    }
+
+    body.dark {
+      background: linear-gradient(to right, var(--bg-dark), #1e293b);
+      color: var(--text-dark);
+    }
+
+    .container {
+      background-color: var(--card-light);
+      color: var(--text-light);
+      padding: 30px;
+      border-radius: 16px;
+      box-shadow: 0 12px 30px rgba(0,0,0,0.2);
+      width: 100%;
+      max-width: 850px;
+      transition: background-color var(--transition-speed), color var(--transition-speed);
+    }
+
+    body.dark .container {
+      background-color: var(--card-dark);
+      color: var(--text-dark);
+      box-shadow: 0 0 20px rgba(255, 255, 255, 0.05);
+    }
+
+    h1 {
+      text-align: center;
+      color: var(--accent-light);
+      margin-bottom: 5px;
+      transition: color var(--transition-speed);
+    }
+
+    body.dark h1 {
+      color: var(--accent-dark);
+    }
+
+    .quote, .datetime {
+      text-align: center;
+      margin-bottom: 10px;
+      font-style: italic;
+      font-size: 0.95rem;
+    }
+
+    .form-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+      gap: 15px;
+      margin-top: 20px;
+    }
+
+    .form-grid textarea {
+      grid-column: 1 / -1;
+      resize: vertical;
+    }
+
+    input, select, textarea {
+      padding: 10px;
+      border: 1px solid #ccc;
+      border-radius: 8px;
+      font-size: 14px;
+      background-color: #f9fafb;
+      transition: 0.2s ease;
+    }
+
+    body.dark input, 
+    body.dark select, 
+    body.dark textarea {
+      background-color: #334155;
+      color: var(--text-dark);
+      border: 1px solid #475569;
+    }
+
+    button {
+      padding: 10px 18px;
+      background-color: var(--accent-light);
+      color: white;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      font-size: 15px;
+      margin-top: 20px;
+      transition: background-color 0.3s ease;
+    }
+
+    button:hover {
+      background-color: #4f46e5;
+    }
+
+    ul {
+      list-style: none;
+      padding: 0;
+      margin-top: 20px;
+    }
+
+    li {
+      background-color: #f1f5f9;
+      padding: 14px 18px;
+      border-left: 5px solid var(--accent-light);
+      border-radius: 10px;
+      margin-bottom: 12px;
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      flex-wrap: wrap;
+      gap: 10px;
+    }
+
+    body.dark li {
+      background-color: #475569;
+      border-left-color: var(--accent-dark);
+    }
+
+    li.done {
+      text-decoration: line-through;
+      opacity: 0.6;
+    }
+
+    .task-content {
+      flex: 1 1 auto;
+      max-width: 85%;
+    }
+
+    .buttons {
+      display: flex;
+      gap: 10px;
+      flex-shrink: 0;
+    }
+
+    .buttons button {
+      font-size: 18px;
+      background: none;
+      border: none;
+      cursor: pointer;
+    }
+
+    .done-btn { color: green; }
+    .delete-btn { color: red; }
+
+    .stats {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      align-items: center;
+      margin-top: 25px;
+      gap: 10px;
+    }
+
+    .dark-toggle button {
+      background-color: #4b5563;
+      color: #f8fafc;
+      border-radius: 6px;
+    }
+
+    body.dark .dark-toggle button {
+      background-color: #e5e7eb;
+      color: #1f2937;
+    }
+
+    @media (max-width: 600px) {
+      .form-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .task-content {
+        max-width: 100%;
+      }
+
+      .stats {
+        flex-direction: column;
+        align-items: flex-start;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1 id="title">📝 My Ultimate To-Do List</h1>
+    <div class="datetime" id="datetime"></div>
+    <div class="quote" id="quote"></div>
+
+    <div class="form-grid">
+      <input type="text" id="taskName" placeholder="Task Title" />
+      <input type="date" id="dueDate" />
+      <select id="category">
+        <option value="Personal">Personal</option>
+        <option value="Work">Work</option>
+        <option value="Study">Study</option>
+      </select>
+      <select id="priority">
+        <option value="Normal">Normal</option>
+        <option value="High">High</option>
+        <option value="Urgent">Urgent</option>
+      </select>
+      <textarea id="description" rows="2" placeholder="Task Description..."></textarea>
+    </div>
+
+    <button onclick="addTask()">Add Task</button>
+
+    <ul id="taskList"></ul>
+
+    <div class="stats">
+      <div>Total Tasks: <span id="total">0</span></div>
+      <div>Completed: <span id="done">0</span></div>
+      <div>Pending: <span id="remaining">0</span></div>
+      <div class="dark-toggle">
+        <button onclick="toggleDarkMode()" id="toggleBtn">🌙 Toggle Dark Mode</button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const quotes = [
+      "Push yourself, because no one else is going to do it for you.",
+      "Your limitation—it’s only your imagination.",
+      "Success doesn’t just find you. You have to go out and get it.",
+      "Great things never come from comfort zones.",
+      "Wake up with determination. Go to bed with satisfaction."
+    ];
+
+    document.getElementById("quote").textContent = `"${quotes[Math.floor(Math.random() * quotes.length)]}"`;
+
+    function updateDateTime() {
+      const now = new Date();
+      document.getElementById("datetime").textContent = now.toLocaleString();
+    }
+    setInterval(updateDateTime, 1000);
+    updateDateTime();
+
+    function addTask() {
+      const title = document.getElementById('taskName').value.trim();
+      const description = document.getElementById('description').value.trim();
+      const dueDate = document.getElementById('dueDate').value;
+      const category = document.getElementById('category').value;
+      const priority = document.getElementById('priority').value;
+
+      if (!title) {
+        alert("Task title is required!");
+        return;
+      }
+
+      const li = document.createElement('li');
+      const contentDiv = document.createElement('div');
+      contentDiv.className = 'task-content';
+      contentDiv.innerHTML = `<strong>${title}</strong><br><small>${description ? description + "<br>" : ""}[${category}] • ${priority} • Due: ${dueDate || 'N/A'}</small>`;
+
+      const btnGroup = document.createElement('div');
+      btnGroup.className = 'buttons';
+
+      const doneBtn = document.createElement('button');
+      doneBtn.innerHTML = '✔️';
+      doneBtn.classList.add('done-btn');
+      doneBtn.onclick = () => {
+        li.classList.toggle('done');
+        updateStats();
+      };
+
+      const deleteBtn = document.createElement('button');
+      deleteBtn.innerHTML = '🗑️';
+      deleteBtn.classList.add('delete-btn');
+      deleteBtn.onclick = () => {
+        li.remove();
+        updateStats();
+      };
+
+      btnGroup.appendChild(doneBtn);
+      btnGroup.appendChild(deleteBtn);
+      li.appendChild(contentDiv);
+      li.appendChild(btnGroup);
+      document.getElementById('taskList').appendChild(li);
+
+      // Clear input fields
+      document.getElementById('taskName').value = '';
+      document.getElementById('description').value = '';
+      document.getElementById('dueDate').value = '';
+      updateStats();
+    }
+
+    function updateStats() {
+      const total = document.querySelectorAll('#taskList li').length;
+      const done = document.querySelectorAll('#taskList li.done').length;
+      document.getElementById('total').textContent = total;
+      document.getElementById('done').textContent = done;
+      document.getElementById('remaining').textContent = total - done;
+    }
+
+    function toggleDarkMode() {
+      document.body.classList.toggle('dark');
+      const toggleBtn = document.getElementById("toggleBtn");
+      toggleBtn.textContent = document.body.classList.contains("dark") ? "☀️ Light Mode" : "🌙 Dark Mode";
+    }
+  </script>
+</body>
+</html>
