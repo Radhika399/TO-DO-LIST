@@ -1,0 +1,28 @@
+/* feature.css - Simple feature styles 
+
+.feature-highlight {
+  background-color: #fffbe6;
+  border-left: 4px solid #ffd700;
+  padding: 12px 18px;
+  border-radius: 8px;
+  margin-bottom: 16px;
+  font-weight: bold;
+  color: #b8860b;
+}
+
+.feature-btn {
+  background-color: #ffd700;
+  color: #333;
+  border: none;
+  border-radius: 6px;
+  padding: 8px 16px;
+  font-size: 15px;
+  cursor: pointer;
+  margin-top: 10px;
+  transition: background 0.2s;
+}
+
+.feature-btn:hover {
+  background-color: #ffe066;
+}
+*/
